@@ -15,3 +15,11 @@ volumes:
 
 
 _NB: Create keystore at etc/ssl/keystore.jks inside "somelocalfolder" with passphrase "changeit"_
+
+### Example keystore:
+```bash
+openssl genrsa -out docker-ca.key 4096
+openssl req -x509 -new -nodes -key docker-ca.key -days 7300 -out docker-ca.pem -subj '/CN=cds-docker-registry'
+openssl pkcs12 -export -in docker-ca.pem -inkey docker-ca.key -certfile docker-ca.pem -out newkeystore.p12
+keytool -importkeystore -srckeystore newkeystore.p12 -srcstoretype pkcs12 -destkeystore /somelocalfolder/keystore.jks -deststoretype JKS
+```
